@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import 'dotenv/config';
+import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { drizzle, NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { Pool } from 'pg';
-import * as schema from '~/db/schema';
+import * as schema from '../db/schema';
 
 @Injectable()
-export class DrizzleService {
+export class DrizzleService implements OnModuleDestroy {
   private readonly pool: Pool;
   public readonly db: NodePgDatabase<typeof schema>;
 
