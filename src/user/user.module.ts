@@ -5,14 +5,9 @@ import { UserController } from '~/user/user.controller';
 import { UserService } from '~/user/user.service';
 
 @Module({
-  imports: [
-    JwtModule.register({
-      global: true,
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '60s' },
-    }),
-  ],
+  imports: [],
   controllers: [UserController],
   providers: [UserService, DrizzleService],
+  exports: [UserService],
 })
 export class UserModule {}
