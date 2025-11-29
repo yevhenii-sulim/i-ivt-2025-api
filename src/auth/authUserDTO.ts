@@ -93,5 +93,3 @@ export class UpdateUserDTO {
   @ApiPropertyOptional({ example: '123asd' })
   password: string;
 }
-
-export type UserType = InferSelectModel<typeof userTable>;
