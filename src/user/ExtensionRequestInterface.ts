@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { UserType } from '~/user/userDTO';
+import { UserType } from '~/auth/authUserDTO';
 
 export type UserTypeWithoutPassword = Omit<UserType, 'password'> | null;
 

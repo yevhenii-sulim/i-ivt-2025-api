@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Patch, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
-import { AuthUserDTO, CreateUserDTO, UpdateUserDTO } from '~/user/userDTO';
+import { AuthUserDTO, CreateUserDTO, UpdateUserDTO } from '~/auth/authUserDTO';
 import { UserService } from '~/user/user.service';
 import { User } from '~/user/user.decorator';
 import type {
@@ -32,36 +32,5 @@ export class UserController {
   @UseGuards(AuthGuard)
   async getUser(@Req() req: ExtensionRequestInterface): Promise<UserTypeWithoutPassword> {
     return req.user;
-  }
-
-  @ApiResponse({
-    status: 201,
-    schema: {
-      example: [{ token: 'eyJhbGciOiJIUzI1...' }],
-    },
-  })
-  @Post('signup')
-  signup(@Body(new ValidationPipe()) body: CreateUserDTO) {
-    return this.userService.createUser(body);
-  }
-  @ApiResponse({
-    status: 201,
-    schema: {
-      example: [{ token: 'eyJhbGciOiJIUzI1...' }],
-    },
-  })
-  @Post('login')
-  login(@Body(new ValidationPipe()) body: AuthUserDTO) {
-    return this.userService.login(body);
-  }
-  @ApiResponse({
-    status: 201,
-    schema: {
-      example: [{ firstname: 'John', lastname: 'Dou', email: 'mail@gmail.com' }],
-    },
-  })
-  @Patch('update')
-  update(@Body(new ValidationPipe()) body: UpdateUserDTO, @User('id') currentUserId: string) {
-    return this.userService.update(body, Number(currentUserId));
   }
 }

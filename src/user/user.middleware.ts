@@ -16,7 +16,6 @@ export class UserMiddleware implements NestMiddleware {
       return next();
     }
     const token = req.headers.authorization.split(' ')[1];
-
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
