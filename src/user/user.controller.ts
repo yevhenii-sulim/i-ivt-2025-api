@@ -17,15 +17,13 @@ export class UserController {
   @ApiResponse({
     status: 200,
     schema: {
-      example: [
-        {
-          id: 1,
-          firstname: 'John',
-          lastname: 'Dou',
-          email: 'mail@gmail.com',
-          createdAt: '2025-11-27T15:28:45.586Z',
-        },
-      ],
+      example: {
+        id: 1,
+        firstname: 'John',
+        lastname: 'Dou',
+        email: 'mail@gmail.com',
+        createdAt: '2025-11-27T15:28:45.586Z',
+      },
     },
   })
   @Get()
