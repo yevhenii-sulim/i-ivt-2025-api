@@ -1,11 +1,4 @@
-import {
-  ExceptionFilter,
-  Catch,
-  ArgumentsHost,
-  HttpException,
-  HttpStatus,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -15,6 +8,10 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     if (error instanceof HttpException) {
       return response.status(error.getStatus()).json({ message: error.getResponse() });
+    }
+
+    if (error.code === 'ECONNREFUSED') {
+      return response.status(503).json({ message: 'Database unavailable' });
     }
 
     if (error.code === '23505') {

@@ -5,7 +5,6 @@ import { AppController } from '~/app.controller';
 import { AppService } from '~/app.service';
 import { AuthModule } from '~/auth/auth.module';
 import { DrizzleModule } from '~/drizzle/drizzle.module';
-import { DbExceptionFilter } from '~/helpers/db-exception.filter';
 import { GlobalExceptionFilter } from '~/helpers/global-exception.filter';
 import { UserMiddleware } from '~/user/user.middleware';
 import { UserModule } from '~/user/user.module';
@@ -29,18 +28,14 @@ import { SentryGlobalFilter } from '@sentry/nestjs/setup';
   providers: [
     AppService,
     UserService,
-    {
-      provide: APP_FILTER,
-      useClass: SentryGlobalFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: DbExceptionFilter,
-    },
-    {
-      provide: APP_FILTER,
-      useClass: GlobalExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: SentryGlobalFilter,
+    // },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: GlobalExceptionFilter,
+    // },
   ],
 })
 export class AppModule implements NestModule {

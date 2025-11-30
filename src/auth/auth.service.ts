@@ -47,6 +47,7 @@ export class AuthService {
   async login(body: AuthUserDTO): Promise<{ token: string }> {
     const user = await this.userService.getUser('email', body.email);
     if (!user) {
+      console.log('user');
       throw new HttpException('Email or password are not correct', HttpStatus.BAD_REQUEST);
     }
 
