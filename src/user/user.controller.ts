@@ -1,7 +1,5 @@
-import { Body, Controller, Get, Patch, Post, Req, UseGuards, ValidationPipe } from '@nestjs/common';
-import { AuthUserDTO, CreateUserDTO, UpdateUserDTO } from '~/auth/authUserDTO';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { UserService } from '~/user/user.service';
-import { User } from '~/user/user.decorator';
 import type {
   ExtensionRequestInterface,
   UserTypeWithoutPassword,

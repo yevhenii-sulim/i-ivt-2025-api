@@ -1,7 +1,8 @@
 import { Body, Controller, Patch, Post, ValidationPipe } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { AuthService } from '~/auth/auth.service';
-import { AuthUserDTO, CreateUserDTO, UpdateUserDTO } from '~/auth/authUserDTO';
+import { AuthUserDTO, CreateUserDTO } from '~/auth/dto/create-user.dto';
+import { UpdateUserDTO } from '~/auth/dto/update-user.dto';
 import { User } from '~/user/user.decorator';
 
 @Controller()
