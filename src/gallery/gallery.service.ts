@@ -3,7 +3,7 @@ import { CreateGalleryDto } from './dto/create-gallery.dto';
 import { UpdateGalleryDto } from './dto/update-gallery.dto';
 import { DrizzleService } from '~/drizzle/drizzle.service';
 import { imagesTable, userGallery } from '~/db/schema';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import { GalleryType, GalleryWithImages } from '~/gallery/galleryType';
 
 @Injectable()
@@ -29,21 +29,33 @@ export class GalleryService {
     return createdGallery[0];
   }
 
-  async findAll(currentUserId: number, queryPage: number): Promise<GalleryWithImages[]> {
-    const limit = 10;
+  async findAll(
+    currentUserId: number,
+    queryPage: number,
+    queryLimit?: number
+  ): Promise<{ galleries: GalleryWithImages[]; total: number }> {
     const page = queryPage && queryPage > 1 ? queryPage : 1;
+    const limit = queryLimit ? queryLimit : 5;
     const offset = (page - 1) * limit;
-    const galleries = await this.drizzle.db
-      .select({
-        gallery: userGallery,
-        image: imagesTable,
-      })
-      .from(userGallery)
-      .leftJoin(imagesTable, eq(imagesTable.galleryId, userGallery.id))
 
-      .where(eq(userGallery.userId, currentUserId))
-      .limit(limit)
-      .offset(offset);
+    const [galleries, total] = await Promise.all([
+      this.drizzle.db
+        .select({
+          gallery: userGallery,
+          image: imagesTable,
+        })
+        .from(userGallery)
+        .leftJoin(imagesTable, eq(imagesTable.galleryId, userGallery.id))
+
+        .where(eq(userGallery.userId, currentUserId))
+        .limit(limit)
+        .offset(offset),
+
+      this.drizzle.db
+        .select({ count: sql<number>`count(*)` })
+        .from(userGallery)
+        .where(eq(userGallery.userId, currentUserId)),
+    ]);
 
     const map = new Map<number, GalleryWithImages>();
 
@@ -56,7 +68,7 @@ export class GalleryService {
       }
     });
 
-    return Array.from(map.values());
+    return { galleries: Array.from(map.values()), total: total[0].count };
   }
 
   async findOne(currentUserId: number, galleryId: number): Promise<GalleryWithImages> {
