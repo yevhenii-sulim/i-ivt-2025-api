@@ -1,6 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
 import { DrizzleService } from '~/drizzle/drizzle.service';
-import { AuthUserDTO, CreateUserDTO, UpdateUserDTO } from '~/auth/authUserDTO';
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 
 import * as bcrypt from 'bcrypt';
@@ -8,6 +7,8 @@ import { userTable } from '~/db/schema';
 import { eq } from 'drizzle-orm';
 import { UserService } from '~/user/user.service';
 import { UserType } from '~/user/userType';
+import { AuthUserDTO, CreateUserDTO } from '~/auth/dto/create-user.dto';
+import { UpdateUserDTO } from '~/auth/dto/update-user.dto';
 
 @Injectable()
 export class AuthService {

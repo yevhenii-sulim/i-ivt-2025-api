@@ -1,6 +1,6 @@
 {
-  "id": "d82501b5-0d1d-4818-8ee4-2d51685c8dc6",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "1396936f-1de7-4660-8a16-de84b8868504",
+  "prevId": "d82501b5-0d1d-4818-8ee4-2d51685c8dc6",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -93,6 +93,25 @@
             "cache": "1",
             "cycle": false
           }
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         },
         "userId": {
           "name": "userId",

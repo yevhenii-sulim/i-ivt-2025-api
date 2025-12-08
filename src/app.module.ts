@@ -11,6 +11,7 @@ import { UserModule } from '~/user/user.module';
 import { UserService } from '~/user/user.service';
 import { APP_FILTER } from '@nestjs/core';
 import { SentryGlobalFilter } from '@sentry/nestjs/setup';
+import { GalleryModule } from './gallery/gallery.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { SentryGlobalFilter } from '@sentry/nestjs/setup';
     DrizzleModule,
     UserModule,
     AuthModule,
+    GalleryModule,
   ],
   controllers: [AppController],
   providers: [
