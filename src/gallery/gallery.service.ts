@@ -10,22 +10,26 @@ import { GalleryType, GalleryWithImages } from '~/gallery/galleryType';
 export class GalleryService {
   constructor(private readonly drizzle: DrizzleService) {}
 
-  async getGalleryByTitle(title: string): Promise<GalleryType[]> {
+  async getGalleryByTitle(title: string, currentId: number): Promise<GalleryType[]> {
     const galleries = this.drizzle.db
       .select()
       .from(userGallery)
-      .where(eq(userGallery.title, title));
+      .where(and(eq(userGallery.title, title), eq(userGallery.userId, currentId)));
     return galleries;
   }
+
   async create(createGalleryDto: CreateGalleryDto, currentUserId: number): Promise<GalleryType> {
-    const galleries = await this.getGalleryByTitle(createGalleryDto.title);
+    const galleries = await this.getGalleryByTitle(createGalleryDto.title, currentUserId);
     if (!!galleries.length) {
       throw new HttpException('gallery title like this already exist', HttpStatus.CONFLICT);
     }
-    const createdGallery = await this.drizzle.db.insert(userGallery).values({
-      ...createGalleryDto,
-      userId: currentUserId,
-    });
+    const createdGallery = await this.drizzle.db
+      .insert(userGallery)
+      .values({
+        ...createGalleryDto,
+        userId: currentUserId,
+      })
+      .returning();
     return createdGallery[0];
   }
 
@@ -102,6 +106,10 @@ export class GalleryService {
     updateGalleryDto: UpdateGalleryDto,
     currentUserId: number
   ): Promise<GalleryType> {
+    const foundGallery = await this.findOne(currentUserId, galleryId);
+    if (!foundGallery) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
     const updatedGallery = await this.drizzle.db
       .update(userGallery)
       .set(updateGalleryDto)
@@ -111,6 +119,10 @@ export class GalleryService {
   }
 
   async remove(galleryId: number, currentUserId: number): Promise<GalleryType> {
+    const foundGallery = await this.findOne(currentUserId, galleryId);
+    if (!foundGallery) {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
     const deletedGallery = await this.drizzle.db
       .delete(userGallery)
       .where(and(eq(userGallery.userId, currentUserId), eq(userGallery.id, galleryId)))
